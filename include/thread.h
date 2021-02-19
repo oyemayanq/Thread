@@ -1,6 +1,6 @@
 #ifndef THREAD_H
 #define THREAD_H
-
+#include <iostream>
 
 class Thread
 {
@@ -9,26 +9,33 @@ class Thread
         Thread(const char*);
         Thread(const Thread&);
 
-        char* getThread() const;
+        void operator = (const char*);
 
-        char* add(char*,char*);
-        char* add(char*,char&);
-        char* add(char&,char*);
+        /// + Operator overloading
 
-        void operator = (const Thread&);
-        void operator = (char* const);
+        char operator [] (int);
+        friend Thread operator + (const char&,const Thread&);
+        friend Thread operator + (const Thread&,const char&);
+        friend Thread operator + (const char*,const Thread&);
+        friend Thread operator + (const Thread&,const char*);
+        friend Thread operator + (const Thread&,const Thread&);
 
-        friend Thread operator + (Thread&,Thread&);
-        friend Thread operator + (Thread&,char* const);
-        friend Thread operator + (char* const,Thread&);
-        friend Thread operator + (Thread&,char);
-        friend Thread operator + (char,Thread&);
+        ///output operator
+
+        friend std::ostream& operator << (std::ostream&,Thread&);
+
         void display();
         ~Thread();
 
     private:
-        char* buffer;
+        char* str;
         void setThread(const char*);
+
+        char* getThread() const;
+
+        char* add(const char&,const char*) const;
+        char* add(const char*,const char&) const;
+        char* add(const char*,const char*) const;
 };
 
 #endif // THREAD_H
