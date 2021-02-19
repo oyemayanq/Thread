@@ -1,96 +1,121 @@
 #include "thread.h"
-#include <iostream>
 #include <cstring>
+#include <iostream>
+using namespace std;
 
+//------------------------------------------------------------------>
+///Initialization
 Thread::Thread()
 {
-    buffer = nullptr;
+    //ctor
+    str = nullptr;
 }
 
-Thread::Thread(const char* src)
+Thread::Thread(const char* buffer)
 {
-    setThread(src);
-    /*
-        buffer = num;
-    */
+    this->setThread(buffer);
+
 }
 
 Thread::Thread(const Thread& source)
 {
-    char* src = source.getThread();
-    this->setThread(src);
+    char* buffer = source.getThread();
+    this->setThread(buffer);
 }
 
-void Thread::setThread(const char* src)
+void Thread::operator = (const char* buffer)
 {
-    int i;
-    int n = strlen(src);
-    buffer = new char[n+1];
+    this->setThread(buffer);
+}
+
+//----------------------------------------------------------------->
+
+///Utility methods
+
+char Thread::operator [] (int n)
+{
+    return str[n];
+}
+
+/// add methods
+
+char* Thread::add(const char& x,const char* y) const
+{
+    int i=0;
+    int n = strlen(y);
+    char* temp = new char[n+2];
+    temp[0] = x;
     for(i=0;i<n;i++)
-        buffer[i] = src[i];
-    buffer[i] = '\0';
+        temp[i+1] = y[i];
+    temp[i+1] = '\0';
+    return temp;
 }
 
-char* Thread::getThread() const
+char* Thread::add(const char* x,const char& y) const
 {
-    return buffer;
+    int i=0;
+    int n = strlen(x);
+    char* temp = new char[n+2];
+    for(i=0;i<n;i++)
+        temp[i] = x[i];
+    temp[i++] = y;
+    temp[i] = '\0';
+    return temp;
 }
 
-void Thread::display()
-{
-    int n = strlen(buffer);
-    for(int i=0;i<n;i++)
-        std::cout<<buffer[i];
-}
-
-char* Thread::add(char* x,char*y)
+char* Thread::add(const char* x,const char* y) const
 {
     int n = strlen(x) + strlen(y);
-    char* z = new char[n+1];
     int i=0,j=0,k=0;
+    char* temp = new char[n+1];
     while(x[i]!='\0')
-        z[k++] = x[i++];
+        temp[k++] = x[i++];
     while(y[j]!='\0')
-        z[k++] = y[j++];
-    z[k] = '\0';
-    return z;
+        temp[k++] = y[j++];
+    temp[k] = '\0';
+    return temp;
 }
 
-char* Thread::add(char* x,char& y)
-{
-    int n = strlen(x);
-    char* z = new char[n+2];
-    int i=0;
-    for(;i<n;i++)
-        z[i] = x[i];
-    z[i++] = y;
-    z[i] = '\0';
-    return z;
-}
 
-char* Thread::add(char& x,char* y)
-{
-    int n = strlen(y),k=0,i=0;
-    char* z = new char[n+2];
-    z[k++] = x;
-    while(i<n)
-        z[k++] = y[i++];
-    z[k] = '\0';
-    return z;
-}
+/// + operator methods
 
-void Thread::operator = (const Thread& rhs)
+Thread operator + (const char& lhs,const Thread& rhs)
 {
     char* x = rhs.getThread();
-    this->setThread(x);
+    char* res = rhs.add(lhs,x);
+    Thread temp(res);
+    delete[] res;
+    return temp;
 }
 
-void Thread::operator = (char* const rhs)
+Thread operator + (const Thread& lhs,const char& rhs)
 {
-    this->setThread(rhs);
+    char* x = lhs.getThread();
+    char* res = lhs.add(x,rhs);
+    Thread temp(res);
+    delete[] res;
+    return temp;
 }
 
-Thread operator + (Thread& lhs,Thread& rhs)
+Thread operator + (const char* lhs,const Thread& rhs)
+{
+    char* x = rhs.getThread();
+    char* res = rhs.add(lhs,x);
+    Thread temp(res);
+    delete[] res;
+    return temp;
+}
+
+Thread operator + (const Thread& lhs,const char* rhs)
+{
+    char* x = lhs.getThread();
+    char* res = lhs.add(x,rhs);
+    Thread temp(res);
+    delete[] res;
+    return temp;
+}
+
+Thread operator + (const Thread& lhs,const Thread& rhs)
 {
     char* x = lhs.getThread();
     char* y = rhs.getThread();
@@ -100,43 +125,43 @@ Thread operator + (Thread& lhs,Thread& rhs)
     return temp;
 }
 
-Thread operator + (Thread& lhs,char* const rhs)
+//----------------------------------------------------------------->
+
+///Output operator method
+
+ostream& operator << (ostream& out,Thread& rhs)
 {
-    char* x = lhs.getThread();
-    char* res = lhs.add(x,rhs);
-    Thread temp(res);
-    delete[] res;
-    return temp;
+    int i=0;
+    char* res = rhs.getThread();
+    for(;res[i]!='\0';i++)
+        out<<res[i];
+    return out;
 }
 
-Thread operator + (char* const lhs,Thread& rhs)
+//----------------------------------------------------------------->
+///Getter and setter
+
+void Thread::setThread(const char* buffer)
 {
-    char* x = rhs.getThread();
-    char*res = rhs.add(lhs,x);
-    Thread temp(res);
-    delete[] res;
-    return temp;
+    int i=0;
+    int n = strlen(buffer);
+    str = new char[n+1];
+    for(;i<n;i++)
+        str[i] = buffer[i];
+    str[i] = '\0';
 }
 
-Thread operator + (Thread& lhs,char rhs)
+char* Thread::getThread() const
 {
-    char* x = lhs.getThread();
-    char* res = lhs.add(x,rhs);
-    Thread temp(res);
-    delete[] res;
-    return temp;
+    return str;
 }
 
-Thread operator + (char lhs,Thread& rhs)
-{
-    char* y = rhs.getThread();
-    char* res = rhs.add(lhs,y);
-    Thread temp(res);
-    delete[] res;
-    return temp;
-}
+//------------------------------------------------------------------->
+
+///Destructor
 
 Thread::~Thread()
 {
-    delete[] buffer;
+    //dtor
+    delete[] str;
 }
