@@ -24,6 +24,7 @@ class Thread
 
         friend std::ostream& operator << (std::ostream&,Thread&);
 
+        int length() const;
         void display();
         ~Thread();
 
