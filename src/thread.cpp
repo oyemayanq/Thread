@@ -32,6 +32,11 @@ void Thread::operator = (const char* buffer)
 
 ///Utility methods
 
+int Thread::length()
+{
+    return strlen(str);
+}
+
 char Thread::operator [] (int n)
 {
     return str[n];
