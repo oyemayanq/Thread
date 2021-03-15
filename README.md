@@ -11,9 +11,11 @@ A simple implementation to create a dynamic array of characters same as string c
     b- Thread str("Thread")  
     c- Thread str(a char array)  
     d- Thread str(a Thread object)    // Copy constructor  
+    
 2. Using assignment operator:  
     a- Thread str = "Thread"  
     b- Thread str = a Thread object  
+    
 3. Using the extraction( >> ) operator:  
     a- cin>>str                      // str is a Thread object  
     b- str.getLine()                // To read line  
@@ -24,7 +26,7 @@ A simple implementation to create a dynamic array of characters same as string c
 2. subThread(int,int)  -- to get substring of the Thread object.  
         first parameter is starting position and second parameter is length of substring  
 3. To access char at valid index use array index operator ( [] ) with Thread object.  
-      Example: str[valid index]  
+        Example: str[valid index]  
         
 ### Concatenation  
   
@@ -40,4 +42,4 @@ All concatenations are done using the "+" operator and a new Thread object is re
 ### Displaying Thread object
   
 => Using the insertion ( << ) operator  
-      Example: cout<<Thread object
+        Example: cout<<Thread object
