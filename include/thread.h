@@ -12,20 +12,22 @@ class Thread
         void operator = (const char*);
 
         /// + Operator overloading
-
-        char operator [] (int);
         friend Thread operator + (const char&,const Thread&);
         friend Thread operator + (const Thread&,const char&);
         friend Thread operator + (const char*,const Thread&);
         friend Thread operator + (const Thread&,const char*);
         friend Thread operator + (const Thread&,const Thread&);
 
-        ///output operator
-
+        ///output and input operator
         friend std::ostream& operator << (std::ostream&,Thread&);
+        friend std::istream& operator >>(std::istream&,Thread&);
+        void getLine();
 
+        ///utility methods
         int length() const;
-        void display();
+        Thread subThread(int,int);
+        char operator [] (int);   
+    
         ~Thread();
 
     private:
