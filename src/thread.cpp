@@ -1,6 +1,7 @@
 #include "thread.h"
 #include <cstring>
 #include <iostream>
+#include <cstdlib>
 using namespace std;
 
 //------------------------------------------------------------------>
@@ -8,7 +9,8 @@ using namespace std;
 Thread::Thread()
 {
     //ctor
-    str = nullptr;
+    str = new char[1];
+    str[0] = '\0';
 }
 
 Thread::Thread(const char* buffer)
@@ -37,10 +39,26 @@ int Thread::length()
     return strlen(str);
 }
 
+Thread Thread::subThread(int pos,int len){
+    Thread res;
+    Thread z(this->getThread());
+    int n = this->length();
+    if(len>n){
+        cout<<"Out of range"<<endl;
+        exit(1);
+    }
+    for(int i=pos;i<len;i++){
+        res = res + z[i];
+    }
+    return res;
+}
+
 char Thread::operator [] (int n)
 {
     return str[n];
 }
+
+//------------------------------------------------------------------->
 
 /// add methods
 
@@ -132,7 +150,7 @@ Thread operator + (const Thread& lhs,const Thread& rhs)
 
 //----------------------------------------------------------------->
 
-///Output operator method
+///Output and input operator method
 
 ostream& operator << (ostream& out,Thread& rhs)
 {
@@ -143,6 +161,19 @@ ostream& operator << (ostream& out,Thread& rhs)
     return out;
 }
 
+istream& operator >> (istream& in,Thread& rhs){
+    char s[1024];
+    in>>s;
+    rhs = s;
+    return in;
+}
+
+void Thread::getLine(){
+    char s[1024];
+    gets(s);
+    this->setThread(s);
+}
+
 //----------------------------------------------------------------->
 ///Getter and setter
 
@@ -150,6 +181,7 @@ void Thread::setThread(const char* buffer)
 {
     int i=0;
     int n = strlen(buffer);
+    delete[] str;
     str = new char[n+1];
     for(;i<n;i++)
         str[i] = buffer[i];
