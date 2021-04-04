@@ -27,6 +27,12 @@ A simple implementation to create a dynamic array of characters same as string c
         first parameter is starting position and second parameter is length of substring  
 3. To access char at valid index use array index operator ( [] ) with Thread object.  
         Example: str[valid index]  
+4. toInt() -- converts valid Thread object into int.  
+        Example: str.toInt()
+5. toLongInt() -- converts valid Thread object into long int.  
+6. toLargeInt() -- converts valid Thread object into long long int.
+7. Comparing two Thread objects using **==** operator returns true if both the objects are same else returns false.  
+8. Two Thread objects can be compared using the **!=** operator as well.
         
 ### Concatenation  
   
