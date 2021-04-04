@@ -1,4 +1,4 @@
-#include "thread.h"
+#include "../include/thread.h"
 #include <cstring>
 #include <iostream>
 #include <cstdlib>
@@ -34,7 +34,7 @@ void Thread::operator = (const char* buffer)
 
 ///Utility methods
 
-int Thread::length()
+int Thread::length() const
 {
     return strlen(str);
 }
@@ -56,6 +56,57 @@ Thread Thread::subThread(int pos,int len){
 char Thread::operator [] (int n)
 {
     return str[n];
+}
+
+int Thread::toInt(){
+  char* x = this->getThread();
+  int s = 0;
+  int i;
+  if(x[0] == '-')
+    i = 1;
+  else
+    i = 0;
+  while(x[i] != '\0'){
+    s = s*10 + x[i]%48;
+    i++;
+  }
+  if(x[0] == '-')
+    return -s;
+  return s;
+}
+
+long Thread::toLongInt(){
+  char* x = this->getThread();
+  long s = 0;
+  int i = 0;
+  if(x[0] == '-')
+    i = 1;
+  else
+    i = 0;
+  while(x[i] != '\0'){
+    s = s*10 + x[i]%48;
+    i++;
+  }
+  if(x[0] == '-')
+    return -s;
+  return s;
+}
+
+long long Thread::toLargeInt(){
+  char* x = this->getThread();
+  long long s = 0;
+  int i = 0;
+  if(x[0] == '-')
+    i = 1;
+  else
+    i = 0;
+  while(x[i] != '\0'){
+    s = s*10 + x[i]%48;
+    i++;
+  }
+  if(x[0] == '-')
+    return -s;
+  return s;
 }
 
 //------------------------------------------------------------------->
@@ -99,6 +150,32 @@ char* Thread::add(const char* x,const char* y) const
     return temp;
 }
 
+/// comparison utility methods
+
+///// returns 0 if x == y returns 2 if x > y and returns -2 if x < y
+/*
+  * x > y means x will come after y in dictionary arrangement
+  * x < y means x will come before y in dictionary arrnagement
+*/
+int Thread::compareThread(const char* x,const char* y) const {
+  int i = 0;
+  int j = 0;
+  int n = strlen(x);
+  int m = strlen(y);
+  while(x[i] != '\0' && y[j] != '\0'){
+    if(x[i] > y[j])
+      return 2;
+    if(x[i] < y[j])
+      return -2;
+    i++;
+    j++;
+  }
+  if(i < n)
+    return 2;
+  if(j < m)
+    return -2;
+  return 0;
+}
 
 /// + operator methods
 
@@ -147,6 +224,23 @@ Thread operator + (const Thread& lhs,const Thread& rhs)
     delete[] res;
     return temp;
 }
+
+/// Comparison operators
+
+bool operator == (const Thread& lhs,const Thread& rhs){
+  char* x = lhs.getThread();
+  char* y = rhs.getThread();
+  int z = lhs.compareThread(x,y);
+  if(z == 0)
+    return true;
+  else
+    return false;
+}
+
+bool operator != (const Thread& lhs,const Thread& rhs){
+  return !(lhs == rhs);
+}
+
 
 //----------------------------------------------------------------->
 
